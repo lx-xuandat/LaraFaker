@@ -43,9 +43,9 @@ class Router
                 );
             }
 
-            return new \Exception("<b>Page $path not found.</b>", 404);
+            throw new \Exception("<b>Page $path not found.</b>", 404);
         } catch (\Throwable $th) {
-            throw $th;
+            return $th->getMessage();
         }
     }
 }

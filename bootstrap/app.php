@@ -40,6 +40,23 @@ function array_get(array $arr, string $keys, mixed $default = null)
     return $exist ? $arrNested : $default;
 }
 
+function view(string $file, array $params): mixed
+{
+    try {
+        if (file_exists(ROOT . '/resources/views/' . str_replace('.', '/', $file) . '.blade.php')) {
+            ob_start();
+            extract($params);
+            include(ROOT . '/resources/views/' . str_replace('.', '/', $file) . '.blade.php');
+    
+            return ob_get_clean();
+        }
+
+        throw new \Exception("View $file not found", 404);
+    } catch (\Exception $th) {
+        return $th;
+    }
+}
+
 /**
  * Load config
  */

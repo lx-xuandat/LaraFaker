@@ -9,6 +9,11 @@ class LoginController extends Controller
 {
     public function getLogin(Request $request)
     {
-        return 'xin chao ban hien';
+        $params = [
+            'title' => 'datlx197',
+            'params' => 'datlx',
+        ];
+
+        return view('admin.login', $params);
     }
 }
