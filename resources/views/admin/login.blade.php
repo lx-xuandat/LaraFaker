@@ -8,8 +8,13 @@
             font-family: Arial, Helvetica, sans-serif;
         }
 
+        .lb-login {
+            text-align: center;
+        }
         form {
             border: 3px solid #f1f1f1;
+            max-width: 450px;
+            margin: auto;
         }
 
         input[type=text],
@@ -77,9 +82,9 @@
 
 <body>
 
-    <h2>Login Form <?php echo $params; ?></h2>
+    <h2 class="lb-login">Login Form</h2>
 
-    <form action="/action_page.php" method="post">
+    <form action="/login" method="post">
         <div class="imgcontainer">
             <img src="img_avatar2.png" alt="Avatar" class="avatar">
         </div>

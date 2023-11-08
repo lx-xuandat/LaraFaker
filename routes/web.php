@@ -6,3 +6,4 @@ use App\Cores\Application;
 $router = Application::$app->router;
 
 $router->get('/login', [LoginController::class, 'getLogin']);
+$router->post('/login', [LoginController::class, 'postLogin']);

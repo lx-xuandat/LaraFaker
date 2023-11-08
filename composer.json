@@ -13,19 +13,11 @@
             "App\\": "app/"
         },
         "files": [
-            "app/Helpers/autoload.php"
         ]
     },
     "require": {
         "php": "^8",
         "vlucas/phpdotenv": "^5.5",
-        "jenssegers/blade": "^1.4",
-        "illuminate/database": "^8",
-        "symfony/routing": "^6.0",
-        "league/config": "^1.2",
-        "league/uri": "^6.7",
-        "league/route": "^5.1",
-        "laminas/laminas-diactoros": "^3.2",
-        "laminas/laminas-httphandlerrunner": "^2.5"
+        "illuminate/database": "^8"
     }
 }
