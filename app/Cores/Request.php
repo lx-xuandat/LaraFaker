@@ -11,7 +11,7 @@ class Request
 
     public function method()
     {
-        return strtolower($_SERVER['REQUEST_METHOD']);
+        return strtolower($_SERVER['REQUEST_METHOD'] ?? 'cli');
     }
 
     public function path()

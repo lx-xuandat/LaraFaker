@@ -1,0 +1,22 @@
+#!/usr/bin/php
+<?php
+
+use App\Cores\Migrate;
+
+error_reporting(E_ALL);
+ini_set('display_errors', 'On');
+
+define("ROOT", __DIR__);
+
+require_once ROOT . '/vendor/autoload.php';
+$dotenv = \Dotenv\Dotenv::createImmutable(ROOT);
+$dotenv->load();
+
+$options = $_SERVER['argv'];
+
+$app = new \App\Cores\Application([]);
+
+if (isset($options[1]) && $options[1] === 'migrate') {
+    $app->migrate = new Migrate();
+    $app->migrate->apply();
+}

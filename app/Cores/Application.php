@@ -8,6 +8,7 @@ use Illuminate\Database\Capsule\Manager as CapsuleManager;
 
 class Application
 {
+    public ?Migrate $migrate = null;
     public static array $config;
     public static Application $app;
     public Router $router;
