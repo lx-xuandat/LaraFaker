@@ -6,9 +6,11 @@ class Router
 {
     protected $routes = [];
     public Request $request;
-    public function __construct(Request $request)
+    public Response $response;
+    public function __construct(Request $request, Response $response)
     {
         $this->request = $request;
+        $this->response = $response;
     }
 
     public function get(string $path, array $callback)
@@ -32,14 +34,32 @@ class Router
             // && class_exists($callback[0])
 
             if (is_array($callback)) {
-                $controller = new $callback[0];
+                $controllerDependencies = [];
+
+                $class = new \ReflectionMethod($callback[0], '__construct');
+                foreach ($class->getParameters() as $parameter) {
+                    $serviceName = $parameter->getType() . '';
+
+                    //
+                    $serviceDependencies = [];
+                    $serviceReflection = new \ReflectionMethod($serviceName, '__construct');
+                    foreach ($serviceReflection->getParameters() as $parameter) {
+                        $modelName = $parameter->getType() . '';
+                        $instantModel = new $modelName;
+                        array_push($serviceDependencies, $instantModel);
+                    }
+                    $instantService = new $serviceName(...$serviceDependencies);
+                    //
+
+                    array_push($controllerDependencies, $instantService);
+                }
+
+                $controller = new ($callback[0])(...$controllerDependencies);
                 $controller->action = $callback[1];
                 Application::$app->controller = $controller;
 
-                return call_user_func(
-                    [$controller, $controller->action],
-                    // ...$args
-                    $this->request,
+                return $this->fireDependence(
+                    $controller, $controller->action
                 );
             }
 
@@ -47,5 +67,20 @@ class Router
         } catch (\Throwable $th) {
             return $th->getMessage();
         }
+    }
+
+    public function fireDependence($class, $method)
+    {
+        $fireArgs = array();
+
+        $reflection = new \ReflectionMethod($class, $method);
+
+        foreach ($reflection->getParameters() as $parameter) {
+            $className = $parameter->getType() . '';
+            $instant = new $className;
+            array_push($fireArgs, $instant);
+        }
+
+        return call_user_func_array(array($class, $method), $fireArgs);
     }
 }

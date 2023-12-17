@@ -4,34 +4,46 @@ namespace App\Controllers\Admin\Auth;
 
 use App\Cores\Controller;
 use App\Cores\Request;
+use App\Cores\Response;
 use App\Models\User;
+use App\Request\LoginRequest;
+use App\Services\AuthService;
+use App\Services\UserService;
 
 class LoginController extends Controller
 {
-    public function getLogin(Request $request)
-    {
-        $params = [
-            'title' => 'datlx197',
-            'params' => 'datlx',
-        ];
-
-        return view('admin.login', $params);
+    public function __construct(
+        private UserService $userService,
+        private AuthService $authService
+    ) {
+        $this->userService = $userService;
+        $this->authService = $authService;
     }
 
-    public function postLogin(Request $request)
+    public function getLogin()
     {
-        $email = $request->input('uname');
-        $password = $request->input('psw');
-        $remember = $request->input('remember');
-        // syuttenba@gmail.com
-        // $2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi
-        $auth = User::where([
-            'email' => $email,
-            // 'password' => $password,
-        ])->first();
+        return view('admin.login');
+    }
 
-        if ($auth) {
-            return 'login thanh cong';
+    public function postLogin(LoginRequest $request, Response $response)
+    {
+        try {
+            $email = $request->input('uname');
+            $password = $request->input('psw');
+            $remember = $request->input('remember');
+
+            if ($this->authService->login($email, $password)) {
+                return $response->redirect('/');
+            } else {
+                // check request is ajax method
+                $data = ['name' => 'God', 'age' => -1];
+                header('Content-type: application/json');
+                return json_encode($data);
+            }
+
+            // throw new \Exception('Login fail');
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
     }
 }

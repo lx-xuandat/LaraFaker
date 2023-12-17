@@ -5,24 +5,31 @@ namespace App\Cores;
 use App\Cores\Request;
 use App\Cores\Router;
 use Illuminate\Database\Capsule\Manager as CapsuleManager;
+use Illuminate\Database\Eloquent\Model;
 
 class Application
 {
+    public Session $session;
     public ?Migrate $migrate = null;
     public static array $config;
     public static Application $app;
     public Router $router;
     public Request $request;
+    public Response $response;
     public ?Controller $controller = null;
     public ?CapsuleManager $capsule = null;
+
+    private array $auth = [];
 
     public function __construct(array $config)
     {
         self::$config = $config;
         self::$app = $this;
 
+        $this->session = new Session();
         $this->request = new Request();
-        $this->router = new Router($this->request);
+        $this->response = new Response();
+        $this->router = new Router($this->request, $this->response);
 
         $this->capsule = new CapsuleManager;
         $this->capsule->addConnection([
@@ -38,6 +45,22 @@ class Application
 
     public function run()
     {
-        echo $this->router->resolve();
+        try {
+            echo $this->router->resolve();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function auth(string $guardName, Model $user = null) {
+        // setter
+        if ($user !== null) {
+            $this->auth[$guardName] = $user;
+            $this->session->auth($guardName, $user->{$user->primaryKey});
+
+            return true;
+        }
+
+        // getter
     }
 }

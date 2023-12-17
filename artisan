@@ -14,9 +14,18 @@ $dotenv->load();
 
 $options = $_SERVER['argv'];
 
-$app = new \App\Cores\Application([]);
+if (!isset($options[1])) {
+    exit('Bye!\n');
+}
 
 if (isset($options[1]) && $options[1] === 'migrate') {
+    $app = new \App\Cores\Application([]);
     $app->migrate = new Migrate();
     $app->migrate->apply();
+}
+
+if ($options[1] === 'serve') {
+    $output = null;
+    $code = null;
+    exec('php -S localhost:8888 public/index.php', $output, $code);
 }

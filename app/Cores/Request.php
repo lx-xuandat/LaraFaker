@@ -5,7 +5,8 @@ namespace App\Cores;
 class Request
 {
     protected ?array $data = null;
-    public function __construct() {
+    public function __construct()
+    {
         $this->data = $this->setData();
     }
 
@@ -50,11 +51,13 @@ class Request
         return $body;
     }
 
-    public function input(string $keys, mixed $default = null) {
+    public function input(string $keys, mixed $default = null)
+    {
         return array_get($this->data, $keys, $default);
     }
 
-    public function all() {
+    public function all()
+    {
         return $this->data;
     }
 }
