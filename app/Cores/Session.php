@@ -9,6 +9,7 @@ class Session
     const TYPE_FLASH = 'flash_messages';
     const TYPE_AUTH = 'auth';
     const TYPE_CART = 'cart';
+    const TYPE_INVALID = 'invalid';
 
     /**
      * Session constructor.

@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Admin\Auth;
 
+use App\Cores\Application;
 use App\Cores\Controller;
 use App\Cores\Request;
 use App\Cores\Response;
@@ -22,7 +23,9 @@ class LoginController extends Controller
 
     public function getLogin()
     {
-        return view('admin.login');
+        return view('admin.login', [
+            'error' => Application::$app->session->getFlash('error'),
+        ]);
     }
 
     public function postLogin(LoginRequest $request, Response $response)

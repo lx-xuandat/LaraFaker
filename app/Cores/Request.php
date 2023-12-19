@@ -37,14 +37,14 @@ class Request
         if ($this->isPost()) {
             foreach ($_POST as $key => $value) {
                 $body[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
-                unset($_POST[$key]);
+                // unset($_POST[$key]);
             }
         }
 
         if ($this->isGet()) {
             foreach ($_GET as $key => $value) {
                 $body[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS);
-                unset($_GET[$key]);
+                // unset($_GET[$key]);
             }
         }
 
@@ -59,5 +59,23 @@ class Request
     public function all()
     {
         return $this->data;
+    }
+
+    public function has(string $keys)
+    {
+        $exist = true;
+        $nested = explode('.', $keys);
+        $data = $this->data;
+    
+        foreach ($nested as $key) {
+            if (is_array($data) && array_key_exists($key, $data)) {
+                $data = $data[$key];
+            } else {
+                $exist = false;
+                break;
+            }
+        }
+    
+        return $exist;
     }
 }

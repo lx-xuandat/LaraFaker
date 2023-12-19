@@ -10,16 +10,24 @@ class LoginRequest extends FormRequest
     protected function rules(): array
     {
         return [
-            'username' => 'required',
-            'password' => 'required',
+            'uname' => [
+                'required',
+                'min:8',
+                'max:88'
+            ],
+            'psw' => [
+                'required',
+                'min:8',
+                'max:88'
+            ],
         ];
     }
 
     protected function messages(): array
     {
         return [
-            'username.required' => 'Yeu Cau nhap username',
-            'password.required' => 'Yeu cau nhap mat khau'
+            'uname.required' => 'Yeu Cau nhap username',
+            'psw.required' => 'Yeu cau nhap mat khau',
         ];
     }
 }

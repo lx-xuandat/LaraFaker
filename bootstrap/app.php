@@ -40,7 +40,26 @@ function array_get(array $arr, string $keys, mixed $default = null)
     return $exist ? $arrNested : $default;
 }
 
-function view(string $file, array $params = []): mixed
+function view($view, array|null $data = [])
+{
+    $blade = new \Jenssegers\Blade\Blade(ROOT . '/resources/views', ROOT . '/storage/framework/cache');
+
+    $blade->directive('error', function ($expression) {
+        $errors = '$errors';
+        $app_session = '$app->session';
+        // $expression = '$expression';
+
+        return "<?php {$errors} = \App\Cores\Application::{$app_session}->getFlash('error') ?? null; if ({$errors} && {$errors}[{$expression}] && {$errors}[{$expression}][0]) { ?>";
+    });
+
+    $blade->directive('enderror', function ($expression) {
+        return "<?php } ?>";
+    });
+
+    return $blade->render($view, $data);
+}
+
+function view2(string $file, array $params = []): mixed
 {
     try {
         if (file_exists(ROOT . '/resources/views/' . str_replace('.', '/', $file) . '.blade.php')) {

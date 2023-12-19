@@ -77,6 +77,10 @@
                 width: 100%;
             }
         }
+
+        .invalid {
+            color: #f44336
+        }
     </style>
 </head>
 
@@ -90,11 +94,13 @@
         </div>
 
         <div class="container">
-            <label for="uname"><b>Username</b></label>
+            <label for="uname" class="@error('uname') invalid @enderror"><b>Username </b></label>
             <input type="text" placeholder="Enter Username" name="uname" required>
+            <span class="invalid">{{ ($error && $error['uname']) ? $error['uname'][0] : null }}</span><br/><br/>
 
-            <label for="psw"><b>Password</b></label>
+            <label for="psw" class="@error('psw') invalid @enderror"><b>Password</b></label>
             <input type="password" placeholder="Enter Password" name="psw" required>
+            <span class="invalid">{{ ($error && $error['psw']) ? $error['psw'][0] : null }}</span><br/><br/>
 
             <button type="submit">Login</button>
             <label>
